@@ -83,6 +83,8 @@ image:     ghcr.io/anouarmohamed/flask-api:stg
 ```bash
 make validate          # static repo validation
 make doctor            # local tool and cluster readiness checks
+make install-chainsaw  # install pinned Kyverno Chainsaw locally
+make chainsaw-test     # run declarative Chainsaw admission tests
 make lab-up            # full local lab from cluster creation to evidence checks
 make evidence          # write reports/evidence.md from the live cluster
 make cluster-up        # create the kind lab cluster
@@ -122,6 +124,7 @@ make sbom-summary      # summarize the checked-in Syft SBOM
 - [Lab Guide](docs/LAB-GUIDE.md)
 - [Policy Controls](docs/POLICIES.md)
 - [Evidence](docs/EVIDENCE.md)
+- [Chainsaw Tests](docs/CHAINSAW.md)
 - [Attack Scenarios](docs/ATTACK-SCENARIOS.md)
 - [Digest Pinning](docs/DIGEST-PINNING.md)
 - [Demo Script](docs/DEMO-SCRIPT.md)

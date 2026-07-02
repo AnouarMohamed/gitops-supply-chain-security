@@ -14,8 +14,8 @@ make evidence
 
 `make lab-up` creates the kind cluster, installs Kyverno and Argo CD, applies
 the policies, deploys the app through Argo CD, waits for health, runs admission
-tests, verifies the image signature, verifies the SBOM attestation, prints the
-digest-pinned image reference, and summarizes the SBOM.
+tests, runs the Chainsaw suite, verifies the image signature, verifies the SBOM
+attestation, prints the digest-pinned image reference, and summarizes the SBOM.
 
 `make evidence` writes a live report to:
 
@@ -117,6 +117,7 @@ kubectl -n stg get deploy,pod,svc,hpa,pdb
 
 ```bash
 make test-policies
+make chainsaw-test
 ```
 
 The script performs one allowed server-side dry run and several expected
@@ -126,6 +127,9 @@ denials:
 - `:latest` image tag
 - missing resource limits
 - unsigned Flask API image reference
+
+`make chainsaw-test` covers the same controls with Kyverno Chainsaw's
+declarative test format.
 
 ## 8. Verify Evidence
 

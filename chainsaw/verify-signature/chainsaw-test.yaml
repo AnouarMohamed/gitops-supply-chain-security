@@ -1,0 +1,14 @@
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: verify-signature
+spec:
+  steps:
+    - name: unsigned-flask-api-image-is-denied
+      try:
+        - apply:
+            file: ../../examples/violations/unsigned-flask-api-pod.yaml
+            expect:
+              - check:
+                  ($error != null): true
+                  (contains($error, 'verify-image-signature')): true

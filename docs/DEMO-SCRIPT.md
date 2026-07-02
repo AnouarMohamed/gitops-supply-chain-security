@@ -45,6 +45,7 @@ make lab-up
 
 ```bash
 make test-policies
+make chainsaw-test
 ```
 
 Explain each denial:
@@ -53,6 +54,9 @@ Explain each denial:
 - latest tag: mutable image reference
 - missing limits: uncontrolled resource usage
 - unsigned Flask API image: provenance failure
+
+Use `make chainsaw-test` to show the same controls packaged as declarative e2e
+tests.
 
 ## 1 Minute: Evidence
 

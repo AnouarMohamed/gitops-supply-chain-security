@@ -26,6 +26,9 @@ info "running policy admission demos"
 "$ROOT_DIR/scripts/policy-test.sh"
 "$ROOT_DIR/scripts/clean-demo.sh"
 
+info "running Chainsaw admission tests"
+"$ROOT_DIR/scripts/chainsaw-test.sh"
+
 if [[ "${SKIP_COSIGN:-0}" != "1" ]]; then
   "$ROOT_DIR/scripts/verify-image-signature.sh"
   "$ROOT_DIR/scripts/verify-image-attestation.sh"

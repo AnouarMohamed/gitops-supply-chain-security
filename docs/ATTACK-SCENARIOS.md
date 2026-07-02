@@ -8,6 +8,7 @@ Run the full suite:
 
 ```bash
 make test-policies
+make chainsaw-test
 ```
 
 ## Scenario Matrix
@@ -76,3 +77,6 @@ Capture the scenario results in a report:
 ```bash
 make evidence
 ```
+
+The evidence report includes both the shell-based admission demo and the
+Chainsaw policy suite.

@@ -5,16 +5,19 @@ NAMESPACE ?= stg
 DEMO_NAMESPACE ?= policy-lab-demo
 IMAGE ?= ghcr.io/anouarmohamed/flask-api:stg
 REPORT_PATH ?= reports/evidence.md
+CHAINSAW_VERSION ?= v0.2.15
 
 .DEFAULT_GOAL := help
 
-.PHONY: help validate doctor lab-up evidence cluster-up cluster-down install-kyverno install-argocd apply-policies deploy-app wait-app status test-policies verify-image verify-attestation digest-reference sbom-summary clean-demo
+.PHONY: help validate doctor install-chainsaw chainsaw-test lab-up evidence cluster-up cluster-down install-kyverno install-argocd apply-policies deploy-app wait-app status test-policies verify-image verify-attestation digest-reference sbom-summary clean-demo
 
 help:
 	@printf 'GitOps Supply Chain Security Lab\n\n'
 	@printf 'Targets:\n'
 	@printf '  validate          Static validation for YAML, scripts, and SBOM shape\n'
 	@printf '  doctor            Check required local tools and cluster access\n'
+	@printf '  install-chainsaw  Install pinned Kyverno Chainsaw into .cache/bin\n'
+	@printf '  chainsaw-test     Run declarative Chainsaw admission tests\n'
 	@printf '  lab-up            Full local lab: cluster, controllers, policies, app, checks\n'
 	@printf '  evidence          Generate a live evidence report in reports/evidence.md\n'
 	@printf '  cluster-up        Create the local kind lab cluster\n'
@@ -37,6 +40,12 @@ validate:
 
 doctor:
 	./scripts/doctor.sh
+
+install-chainsaw:
+	CHAINSAW_VERSION="$(CHAINSAW_VERSION)" ./scripts/install-chainsaw.sh
+
+chainsaw-test:
+	CHAINSAW_VERSION="$(CHAINSAW_VERSION)" ./scripts/chainsaw-test.sh
 
 lab-up:
 	CLUSTER_NAME="$(CLUSTER_NAME)" NAMESPACE="$(NAMESPACE)" DEMO_NAMESPACE="$(DEMO_NAMESPACE)" IMAGE="$(IMAGE)" ./scripts/lab-up.sh

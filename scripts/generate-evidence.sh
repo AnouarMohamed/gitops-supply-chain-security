@@ -57,6 +57,7 @@ write_runtime_image() {
   run_block "Checked-In SBOM Summary" "$ROOT_DIR/scripts/sbom-summary.sh"
   run_block "Admission Policy Demo" env DEMO_NAMESPACE="$demo_namespace" "$ROOT_DIR/scripts/policy-test.sh"
   run_block "Demo Namespace Cleanup" env DEMO_NAMESPACE="$demo_namespace" "$ROOT_DIR/scripts/clean-demo.sh"
+  run_block "Chainsaw Policy Test Suite" "$ROOT_DIR/scripts/chainsaw-test.sh"
 } >"$report"
 
 info "wrote evidence report: $report"

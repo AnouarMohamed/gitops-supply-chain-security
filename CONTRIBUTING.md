@@ -19,6 +19,7 @@ available, also run:
 ```bash
 make apply-policies
 make test-policies
+make chainsaw-test
 make evidence
 ```
 

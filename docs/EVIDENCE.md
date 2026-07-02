@@ -72,6 +72,7 @@ It captures:
 - digest-pinned image reference
 - checked-in SBOM summary
 - admission policy demo results
+- Chainsaw policy test results
 
 ## Evidence Story For Presentation
 
@@ -85,6 +86,7 @@ Use this sequence:
 5. Run `make digest-reference`.
 6. Run `make sbom-summary`.
 7. Run `make test-policies` and show that unsigned image references are denied.
+8. Run `make chainsaw-test` to show the same controls in declarative e2e tests.
 
 That gives a clean supply-chain narrative: build provenance, registry artifact,
 signature verification, SBOM evidence, and cluster admission enforcement.

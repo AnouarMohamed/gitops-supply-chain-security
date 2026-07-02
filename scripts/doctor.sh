@@ -16,7 +16,7 @@ if [[ "$ci_mode" -eq 0 ]]; then
   required+=(kubectl)
 fi
 
-optional=(kind helm cosign syft argocd kyverno grype yq shellcheck)
+optional=(kind helm cosign syft chainsaw argocd kyverno grype yq shellcheck)
 
 info "checking required tools"
 for cmd in "${required[@]}"; do
@@ -32,6 +32,8 @@ info "checking optional tools"
 for cmd in "${optional[@]}"; do
   if has_cmd "$cmd"; then
     printf '  ok      %s (%s)\n' "$cmd" "$(command -v "$cmd")"
+  elif [[ "$cmd" == "chainsaw" && -x "$ROOT_DIR/.cache/bin/chainsaw" ]]; then
+    printf '  ok      %s (%s)\n' "$cmd" "$ROOT_DIR/.cache/bin/chainsaw"
   else
     printf '  optional-missing %s\n' "$cmd"
   fi

@@ -13,6 +13,7 @@ permissions:
 env:
   KIND_VERSION: "v0.31.0"
   CLUSTER_NAME: "ci-supply-chain-lab"
+  CHAINSAW_VERSION: "v0.2.15"
 
 jobs:
   validate:
@@ -86,6 +87,9 @@ jobs:
 
       - name: Run admission policy tests
         run: make test-policies
+
+      - name: Run Chainsaw policy tests
+        run: make chainsaw-test
 
       - name: Clean demo namespace
         if: always()
