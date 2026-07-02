@@ -1,0 +1,11 @@
+.DS_Store
+.env
+.env.*
+*.log
+rendered.yaml
+tmp/
+.cache/
+.venv/
+venv/
+__pycache__/
+*.pyc

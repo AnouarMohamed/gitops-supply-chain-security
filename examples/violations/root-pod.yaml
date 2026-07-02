@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: denied-root
+  labels:
+    app.kubernetes.io/name: denied-root
+    app.kubernetes.io/part-of: gitops-supply-chain-security
+spec:
+  restartPolicy: Never
+  securityContext:
+    runAsNonRoot: false
+    runAsUser: 0
+  containers:
+    - name: main
+      image: busybox:1.36.1
+      command:
+        - sh
+        - -c
+        - "echo denied"
+      resources:
+        limits:
+          cpu: 50m
+          memory: 64Mi
+      securityContext:
+        runAsNonRoot: false

@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: denied-latest-tag
+  labels:
+    app.kubernetes.io/name: denied-latest-tag
+    app.kubernetes.io/part-of: gitops-supply-chain-security
+spec:
+  restartPolicy: Never
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65532
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: main
+      image: busybox:latest
+      command:
+        - sh
+        - -c
+        - "echo denied"
+      resources:
+        limits:
+          cpu: 50m
+          memory: 64Mi
+      securityContext:
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
