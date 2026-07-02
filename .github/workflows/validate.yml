@@ -10,6 +10,10 @@ on:
 permissions:
   contents: read
 
+env:
+  KIND_VERSION: "v0.31.0"
+  CLUSTER_NAME: "ci-supply-chain-lab"
+
 jobs:
   validate:
     name: Validate lab artifacts
@@ -30,3 +34,59 @@ jobs:
 
       - name: Validate repository
         run: make validate
+
+  verify-supply-chain:
+    name: Verify image signature and attestation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Verify image signature
+        run: make verify-image
+
+      - name: Verify SBOM attestation
+        run: make verify-attestation
+
+      - name: Show digest-pinned reference
+        run: make digest-reference
+
+  kind-policy-test:
+    name: Run Kyverno policy tests in kind
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
+      - name: Install kind
+        run: |
+          set -euo pipefail
+          curl -fsSL -o kind "https://kind.sigs.k8s.io/dl/${KIND_VERSION}/kind-linux-amd64"
+          chmod +x kind
+          sudo mv kind /usr/local/bin/kind
+          kind version
+
+      - name: Create kind cluster
+        run: make cluster-up
+
+      - name: Install Kyverno
+        run: make install-kyverno
+
+      - name: Apply policies
+        run: make apply-policies
+
+      - name: Run admission policy tests
+        run: make test-policies
+
+      - name: Clean demo namespace
+        if: always()
+        run: make clean-demo

@@ -28,6 +28,7 @@ Talk track:
 ## 3 Minutes: Deploy And Inspect
 
 ```bash
+make wait-app
 make status
 kubectl -n argocd get applications.argoproj.io
 kubectl -n stg get deploy,pod,svc
@@ -37,11 +38,7 @@ kubectl get clusterpolicy
 If starting from scratch:
 
 ```bash
-make cluster-up
-make install-kyverno
-make apply-policies
-make install-argocd
-make deploy-app
+make lab-up
 ```
 
 ## 3 Minutes: Deny Bad Workloads
@@ -61,8 +58,19 @@ Explain each denial:
 
 ```bash
 make verify-image
+make verify-attestation
+make digest-reference
 make sbom-summary
 ```
 
 Close with the key point: the cluster does not trust a YAML file just because it
 exists in Git. It checks runtime posture and image provenance before admission.
+
+## 1 Minute: Evidence Report
+
+```bash
+make evidence
+```
+
+Open `reports/evidence.md`. This gives you a single artifact that captures the
+live state, verified image digest, SBOM attestation, and policy denial results.

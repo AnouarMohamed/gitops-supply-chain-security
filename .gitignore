@@ -4,6 +4,8 @@
 *.log
 rendered.yaml
 tmp/
+reports/*.md
+!reports/.gitkeep
 .cache/
 .venv/
 venv/

@@ -53,14 +53,8 @@ flowchart LR
 Use this path when starting from a clean Linux dev environment with Docker.
 
 ```bash
-make doctor
-make cluster-up
-make install-kyverno
-make apply-policies
-make install-argocd
-make deploy-app
-make status
-make test-policies
+make lab-up
+make evidence
 ```
 
 Use this shorter path when Argo CD, Kyverno, and a Kubernetes context already
@@ -70,6 +64,7 @@ exist:
 make doctor
 make apply-policies
 make deploy-app
+make wait-app
 make status
 make test-policies
 ```
@@ -88,15 +83,20 @@ image:     ghcr.io/anouarmohamed/flask-api:stg
 ```bash
 make validate          # static repo validation
 make doctor            # local tool and cluster readiness checks
+make lab-up            # full local lab from cluster creation to evidence checks
+make evidence          # write reports/evidence.md from the live cluster
 make cluster-up        # create the kind lab cluster
 make cluster-down      # delete the kind lab cluster
 make install-kyverno   # install Kyverno with Helm
 make install-argocd    # install Argo CD manifests
 make apply-policies    # apply all Kyverno ClusterPolicies
 make deploy-app        # create or update the Argo CD Application
+make wait-app          # wait for Argo CD and Kubernetes rollouts
 make status            # inspect Argo CD, Kyverno, policies, and stg workloads
 make test-policies     # run positive and negative admission demos
 make verify-image      # verify the Flask API image signature with Cosign
+make verify-attestation # verify the SBOM attestation attached to the image
+make digest-reference  # print the verified digest-pinned image reference
 make sbom-summary      # summarize the checked-in Syft SBOM
 ```
 
@@ -110,6 +110,7 @@ make sbom-summary      # summarize the checked-in Syft SBOM
 ├── flask-api-sbom.json             # Syft SBOM evidence for the Flask API image
 ├── docs/                           # Architecture, guide, evidence, demos
 ├── examples/                       # Allowed and denied admission test cases
+├── reports/                        # Generated evidence reports stay local
 ├── scripts/                        # Repeatable lab automation
 ├── .github/workflows/validate.yml  # Repo validation workflow
 └── Makefile                        # Main operator entrypoint
@@ -121,6 +122,8 @@ make sbom-summary      # summarize the checked-in Syft SBOM
 - [Lab Guide](docs/LAB-GUIDE.md)
 - [Policy Controls](docs/POLICIES.md)
 - [Evidence](docs/EVIDENCE.md)
+- [Attack Scenarios](docs/ATTACK-SCENARIOS.md)
+- [Digest Pinning](docs/DIGEST-PINNING.md)
 - [Demo Script](docs/DEMO-SCRIPT.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 

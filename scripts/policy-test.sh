@@ -15,9 +15,11 @@ fi
 
 kubectl get namespace "$namespace" >/dev/null 2>&1 || kubectl create namespace "$namespace"
 
+cd "$ROOT_DIR"
+
 info "allowed workload should pass server-side dry run"
 kubectl -n "$namespace" apply --dry-run=server \
-  -f "$ROOT_DIR/examples/allowed/non-root-limited-pod.yaml"
+  -f "examples/allowed/non-root-limited-pod.yaml"
 
 expect_deny() {
   local name="$1"
@@ -34,10 +36,10 @@ expect_deny() {
   fi
 }
 
-expect_deny "root container" "$ROOT_DIR/examples/violations/root-pod.yaml"
-expect_deny "latest tag" "$ROOT_DIR/examples/violations/latest-tag-pod.yaml"
-expect_deny "missing limits" "$ROOT_DIR/examples/violations/missing-limits-pod.yaml"
-expect_deny "unsigned flask-api image" "$ROOT_DIR/examples/violations/unsigned-flask-api-pod.yaml"
+expect_deny "root container" "examples/violations/root-pod.yaml"
+expect_deny "latest tag" "examples/violations/latest-tag-pod.yaml"
+expect_deny "missing limits" "examples/violations/missing-limits-pod.yaml"
+expect_deny "unsigned flask-api image" "examples/violations/unsigned-flask-api-pod.yaml"
 
 if [[ "$failed" -ne 0 ]]; then
   die "one or more policy tests failed"

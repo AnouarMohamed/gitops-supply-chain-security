@@ -3,6 +3,26 @@
 This guide assumes Docker is running and `kubectl` can talk to the cluster you
 want to use. The fastest fully local path uses kind.
 
+## Fast Path
+
+Run the complete lab from a clean local machine:
+
+```bash
+make lab-up
+make evidence
+```
+
+`make lab-up` creates the kind cluster, installs Kyverno and Argo CD, applies
+the policies, deploys the app through Argo CD, waits for health, runs admission
+tests, verifies the image signature, verifies the SBOM attestation, prints the
+digest-pinned image reference, and summarizes the SBOM.
+
+`make evidence` writes a live report to:
+
+```text
+reports/evidence.md
+```
+
 ## 1. Check The Workstation
 
 ```bash
@@ -88,6 +108,7 @@ https://github.com/AnouarMohamed/k8s-multiservice-lab.git
 Inspect the deployment:
 
 ```bash
+make wait-app
 make status
 kubectl -n stg get deploy,pod,svc,hpa,pdb
 ```
@@ -110,11 +131,16 @@ denials:
 
 ```bash
 make verify-image
+make verify-attestation
+make digest-reference
 make sbom-summary
 ```
 
-`verify-image` checks Sigstore keyless identity with Cosign. `sbom-summary`
-summarizes the checked-in Syft SBOM without printing the full artifact.
+`verify-image` checks Sigstore keyless identity with Cosign.
+`verify-attestation` verifies the SBOM attestation attached to the image.
+`digest-reference` prints the digest-pinned image reference derived from the
+verified signature. `sbom-summary` summarizes the checked-in Syft SBOM without
+printing the full artifact.
 
 ## 9. Clean Demo Namespace
 

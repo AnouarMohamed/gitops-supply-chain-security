@@ -9,6 +9,8 @@ Run:
 
 ```bash
 make validate
+make verify-image
+make verify-attestation
 ```
 
 If the change touches policies or demo fixtures and you have a cluster
@@ -17,6 +19,7 @@ available, also run:
 ```bash
 make apply-policies
 make test-policies
+make evidence
 ```
 
 ## Change Guidelines

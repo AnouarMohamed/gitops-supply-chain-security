@@ -14,32 +14,20 @@ output_file="$(mktemp)"
 log_file="$(mktemp)"
 trap 'rm -f "$output_file" "$log_file"' EXIT
 
-info "verifying image signature: $image"
 if ! cosign verify \
   --output json \
   --certificate-oidc-issuer "$issuer" \
   --certificate-identity "$identity" \
   "$image" >"$output_file" 2>"$log_file"; then
   cat "$log_file" >&2
-  die "image signature verification failed"
+  die "could not verify image before deriving digest reference"
 fi
 
-jq -r '
-  [
-    .[] | {
-      digest: .critical.image["docker-manifest-digest"],
-      issuer: .optional.Issuer,
-      subject: .optional.Subject,
-      workflow: .optional.githubWorkflowName,
-      repository: .optional.githubWorkflowRepository,
-      ref: .optional.githubWorkflowRef,
-      sha: .optional.githubWorkflowSha
-    }
-  ] | unique | .[] |
-  "digest: " + (.digest // "unknown"),
-  "issuer: " + (.issuer // "unknown"),
-  "subject: " + (.subject // "unknown"),
-  "workflow: " + (.repository // "unknown") + " / " + (.workflow // "unknown"),
-  "ref: " + (.ref // "unknown"),
-  "sha: " + (.sha // "unknown")
+jq -r --arg tag "$image" '
+  .[0] as $signature
+  | ($signature.critical.identity["docker-reference"] // ($tag | split(":")[0])) as $repository
+  | ($signature.critical.image["docker-manifest-digest"] // "unknown") as $digest
+  | "tag: " + $tag,
+    "digest: " + $digest,
+    "pinned: " + $repository + "@" + $digest
 ' "$output_file"
